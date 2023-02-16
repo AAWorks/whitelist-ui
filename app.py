@@ -4,6 +4,7 @@ from itertools import chain
 from math import nan
 
 SHEET = "data/whitelist.csv"
+st.set_page_config(layout="wide")
 
 @st.cache_data
 def get_lists(sheet):
@@ -16,7 +17,6 @@ def get_lists(sheet):
     return raw, w, b
 
 def setup_streamlit():
-    st.set_page_config(layout="wide")
     st.title('ΣΧ Door Assist')
 
 def check_name(name, whitelist, blacklist):
@@ -42,8 +42,8 @@ def check_name(name, whitelist, blacklist):
                 st.write(match.title())
 
 if __name__ == "__main__":
-    raw, whitelist, blacklist = get_lists(SHEET)
     setup_streamlit()
+    raw, whitelist, blacklist = get_lists(SHEET)
 
     st.header("Check Name")
     name = st.text_input("First Name Last Name: ", "Joe Smith").split(" ")
