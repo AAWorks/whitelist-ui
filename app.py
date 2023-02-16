@@ -3,7 +3,7 @@ import streamlit as st
 from itertools import chain
 from math import nan
 
-SHEET = "data/current_list.csv"
+SHEET = "data/whitelist.csv"
 
 def get_df(spreadsheet):
     return pd.read_csv(spreadsheet, sep=",")
