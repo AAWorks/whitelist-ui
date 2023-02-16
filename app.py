@@ -5,16 +5,15 @@ from math import nan
 
 SHEET = "data/whitelist.csv"
 
-def get_df(spreadsheet):
-    return pd.read_csv(spreadsheet, sep=",")
-
-def get_lists(raw):
+@st.cache_data
+def get_lists(sheet):
+    raw = pd.read_csv(sheet, sep=",")
     raw = raw.drop(raw.columns[0], axis=1).values.tolist()
 
     w = [x.lower() for x in list(chain.from_iterable(raw)) if type(x) == str]
     b = ["daniel labrador"]
 
-    return w, b
+    return raw, w, b
 
 def setup_streamlit():
     st.set_page_config(layout="wide")
@@ -43,8 +42,7 @@ def check_name(name, whitelist, blacklist):
                 st.write(match.title())
 
 if __name__ == "__main__":
-    raw = get_df(SHEET)
-    whitelist, blacklist = get_lists(raw)
+    raw, whitelist, blacklist = get_lists(SHEET)
     setup_streamlit()
 
     st.header("Check Name")
