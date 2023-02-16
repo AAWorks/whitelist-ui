@@ -3,28 +3,29 @@ import streamlit as st
 from itertools import chain
 from math import nan
 
-SHEET = "data/whitelist.csv"
+W_SHEET, B_SHEET = "data/whitelist.csv", "data/blacklist.csv"
 st.set_page_config(layout="wide")
 
 @st.cache_data
-def get_lists(sheet):
-    raw = pd.read_csv(sheet, sep=",")
-    raw = raw.drop(raw.columns[0], axis=1).values.tolist()
+def get_lists(w_sheet, b_sheet):
+    raw_w = pd.read_csv(w_sheet, sep=",")
+    w = raw_w.drop(raw_w.columns[0], axis=1).values.tolist()
+    w = [x.lower() for x in list(chain.from_iterable(w)) if type(x) == str]
 
-    w = [x.lower() for x in list(chain.from_iterable(raw)) if type(x) == str]
-    b = ["daniel labrador"]
+    raw_b = pd.read_csv(b_sheet, sep=",")
+    b = [x.lower() for x in raw_b.Name.values.tolist() if type(x) == str]
 
-    return raw, w, b
+    return raw_w, w, raw_b, b
 
 def setup_streamlit():
     st.title('ΣΧ Door Assist')
-    st.write("Alejandro Alonso, Alpha Alpha, Sig '26")
+    st.write("Alejandro Alonso '26 | Alpha Alpha PC")
 
 def check_name(name, whitelist, blacklist):
-    if " ".join(name) in whitelist:
-        st.success("Whitelisted")
-    elif " ".join(name) in blacklist:
+    if " ".join(name) in blacklist:
         st.error("Blacklisted")
+    elif " ".join(name) in whitelist:
+        st.success("Whitelisted")
     else:
         wfirsts = [x for x in whitelist if name[0] in x.split()]
         wlasts = [x for x in whitelist if name[1] in x.split()]
@@ -44,7 +45,7 @@ def check_name(name, whitelist, blacklist):
 
 if __name__ == "__main__":
     setup_streamlit()
-    raw, whitelist, blacklist = get_lists(SHEET)
+    raw_w, whitelist, raw_b, blacklist = get_lists(W_SHEET, B_SHEET)
 
     st.header("Check Name")
     name = st.text_input("First Name Last Name: ", "Joe Smith").split(" ")
@@ -56,5 +57,5 @@ if __name__ == "__main__":
     check_name(list(map(str.lower, name)), whitelist, blacklist)
     st.text("")
     
-    st.header("Full Whitelist")
-    st.table(raw)
+    st.header("Full Blacklist")
+    st.table(raw_b)
