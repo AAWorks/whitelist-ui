@@ -18,6 +18,7 @@ def get_lists(sheet):
 
 def setup_streamlit():
     st.title('ΣΧ Door Assist')
+    st.write("Alejandro Alonso, Alpha Alpha, Sig '26")
 
 def check_name(name, whitelist, blacklist):
     if " ".join(name) in whitelist:
