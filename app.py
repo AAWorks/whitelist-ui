@@ -56,4 +56,4 @@ if __name__ == "__main__":
     st.text("")
     
     st.header("Full Whitelist")
-    st.write(raw)
+    st.table(raw)
