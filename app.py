@@ -30,13 +30,17 @@ def check_name(name, whitelist, blacklist):
         wlasts = [x for x in whitelist if name[1] in x.split()]
         bfirsts = [x for x in blacklist if name[0] in x.split()]
         blasts = [x for x in blacklist if name[1] in x.split()]
-        
-        st.warning("Not listed. Potential Whitelist Matches:")
-        for match in set(wlasts + wfirsts):
-            st.write(match.title())
-        st.warning("Not listed. Potential Blacklist Matches:")
-        for match in set(blasts + bfirsts):
-            st.write(match.title())
+        w, b = set(wlasts + wfirsts), set(blasts + bfirsts)
+        if not w and not b:
+            st.warning("Not listed. No Potential Matches.")
+        elif w:
+            st.warning("Not listed. Potential Whitelist Matches:")
+            for match in w:
+                st.write(match.title())
+        elif b:
+            st.warning("Not listed. Potential Blacklist Matches:")
+            for match in b:
+                st.write(match.title())
 
 if __name__ == "__main__":
     raw = get_df(SHEET)
