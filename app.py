@@ -4,7 +4,11 @@ from itertools import chain
 from math import nan
 
 W_SHEET, B_SHEET = "data/whitelist.csv", "data/blacklist.csv"
-st.set_page_config(layout="wide")
+
+def setup_streamlit():
+    st.set_page_config(layout="wide")
+    st.title('ΣΧ Door Assist')
+    st.write("Alejandro Alonso '26 | Alpha Alpha PC")
 
 @st.cache_data
 def get_lists(w_sheet, b_sheet):
@@ -16,10 +20,6 @@ def get_lists(w_sheet, b_sheet):
     b = [x.lower() for x in raw_b.Name.values.tolist() if type(x) == str]
 
     return raw_w, w, raw_b, b
-
-def setup_streamlit():
-    st.title('ΣΧ Door Assist')
-    st.write("Alejandro Alonso '26 | Alpha Alpha PC")
 
 def check_name(name, whitelist, blacklist):
     if " ".join(name) in blacklist:
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     
     check_name(list(map(str.lower, name)), whitelist, blacklist)
     st.text("")
-    
     st.error("PSI is Blacklisted - Both Pledges & Brothers")
-    st.header("Full Blacklist")
-    st.table(raw_b)
+
+    #st.header("Full Blacklist")
+    #st.table(raw_b)
