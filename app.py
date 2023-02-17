@@ -57,5 +57,6 @@ if __name__ == "__main__":
     check_name(list(map(str.lower, name)), whitelist, blacklist)
     st.text("")
     
+    st.error("PSI is Blacklisted - Both Pledges & Brothers")
     st.header("Full Blacklist")
     st.table(raw_b)
