@@ -1,13 +1,12 @@
 import pandas as pd
 import streamlit as st
 from itertools import chain
-from math import nan
 
 W_SHEET, B_SHEET = "data/whitelist.csv", "data/blacklist.csv"
 
 def setup_streamlit():
     st.set_page_config(layout="wide")
-    st.title('ΣΧ Door Assist')
+    st.title('Whitelist Assist')
     st.write("Alejandro Alonso '26 | Alpha Alpha PC")
 
 @st.cache_data
