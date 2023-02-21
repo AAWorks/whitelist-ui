@@ -7,7 +7,7 @@ W_SHEET, B_SHEET = "data/whitelist.csv", "data/blacklist.csv"
 def setup_streamlit():
     st.set_page_config(layout="wide")
     st.title('Whitelist Assist')
-    st.write("Alejandro Alonso '26 | Alpha Alpha PC")
+    st.write("Alejandro Alonso UChicago '26")
 
 @st.cache_data
 def get_lists(w_sheet, b_sheet):
@@ -55,7 +55,6 @@ if __name__ == "__main__":
     
     check_name(list(map(str.lower, name)), whitelist, blacklist)
     st.text("")
-    st.error("All PSI is Blacklisted")
 
     #st.header("Full Blacklist")
     #st.table(raw_b)
