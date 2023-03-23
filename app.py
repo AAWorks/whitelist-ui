@@ -2,24 +2,16 @@ import pandas as pd
 import streamlit as st
 from itertools import chain
 
-W_SHEET, B_SHEET = "data/whitelist.csv", "data/blacklist.csv"
+B_SHEET = "data/blacklist.csv"
 
 def setup_streamlit():
     st.set_page_config(layout="wide")
     st.title('Whitelist Assist')
     st.write("Alejandro Alonso UChicago '26")
 
-def add_lists():
-    whitelists = st.file_uploader("Add Whitelist(s)", 
-                                  type=["csv"],
-                                  accept_multiple_files=True)
-    blacklists = st.file_uploader("Add Blacklist(s)",
-                                  type=["csv"],
-                                  accept_multiple_files=True)
-
 @st.cache_data
 def get_lists(wsheets, b_sheet):
-    res = []
+    res, raw = [], pd.DataFrame()
     for wsheet in wsheets:
         raw = pd.read_csv(wsheet, sep=",")
         lst = raw.drop(raw.columns[0], axis=1).values.tolist()
@@ -43,19 +35,21 @@ def check_name(name, whitelist, blacklist):
         w, b = set(wlasts + wfirsts), set(blasts + bfirsts)
         if not w and not b:
             st.warning("Not listed. No Potential Matches.")
-        elif w:
+        if w:
             st.warning("Not listed. Potential Whitelist Matches:")
             for match in w:
                 st.write(match.title())
-        elif b:
+        if b:
             st.warning("Not listed. Potential Blacklist Matches:")
             for match in b:
                 st.write(match.title())
 
 if __name__ == "__main__":
     setup_streamlit()
-    add_lists()
-    raw_w, whitelist, raw_b, blacklist = get_lists([W_SHEET], B_SHEET)
+    whitelists = st.file_uploader("Add Whitelist(s)", 
+                                  type=["csv"],
+                                  accept_multiple_files=True)
+    raw_w, whitelist, raw_b, blacklist = get_lists(whitelists, B_SHEET)
 
     st.header("Check Name")
     name = st.text_input("First Name Last Name: ", "Joe Smith").split(" ")
