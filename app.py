@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from itertools import chain
 
-B_SHEET = "data/blacklist.csv"
+DB_FILE, B_SHEET = "listed.db", "data/blacklist.csv"
 
 def setup_streamlit():
     st.set_page_config(layout="wide")
