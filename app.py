@@ -9,16 +9,26 @@ def setup_streamlit():
     st.title('Whitelist Assist')
     st.write("Alejandro Alonso UChicago '26")
 
-@st.cache_data
-def get_lists(w_sheet, b_sheet):
-    raw_w = pd.read_csv(w_sheet, sep=",")
-    w = raw_w.drop(raw_w.columns[0], axis=1).values.tolist()
-    w = [x.lower() for x in list(chain.from_iterable(w)) if type(x) == str]
+def add_lists():
+    whitelists = st.file_uploader("Add Whitelist(s)", 
+                                  type=["csv"],
+                                  accept_multiple_files=True)
+    blacklists = st.file_uploader("Add Blacklist(s)",
+                                  type=["csv"],
+                                  accept_multiple_files=True)
 
+@st.cache_data
+def get_lists(wsheets, b_sheet):
+    res = []
+    for wsheet in wsheets:
+        raw = pd.read_csv(wsheet, sep=",")
+        lst = raw.drop(raw.columns[0], axis=1).values.tolist()
+        lst = [x.lower() for x in list(chain.from_iterable(lst)) if isinstance(x, str)]
+        res += lst
+    
     raw_b = pd.read_csv(b_sheet, sep=",")
     b = [x.lower() for x in raw_b.Name.values.tolist() if type(x) == str]
-
-    return raw_w, w, raw_b, b
+    return raw, res, raw_b, b
 
 def check_name(name, whitelist, blacklist):
     if " ".join(name) in blacklist:
@@ -44,7 +54,8 @@ def check_name(name, whitelist, blacklist):
 
 if __name__ == "__main__":
     setup_streamlit()
-    raw_w, whitelist, raw_b, blacklist = get_lists(W_SHEET, B_SHEET)
+    add_lists()
+    raw_w, whitelist, raw_b, blacklist = get_lists([W_SHEET], B_SHEET)
 
     st.header("Check Name")
     name = st.text_input("First Name Last Name: ", "Joe Smith").split(" ")
