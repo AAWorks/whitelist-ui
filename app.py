@@ -9,6 +9,12 @@ def setup_streamlit():
     st.title('Whitelist Assist')
     st.write("Alejandro Alonso UChicago '26")
 
+def upload_whitelists():
+    whitelists = st.file_uploader("Add Whitelist(s)", 
+                                  type=["csv"],
+                                  accept_multiple_files=True)
+    return whitelists
+
 @st.cache_data
 def get_lists(wsheets, b_sheet):
     res, raw = [], pd.DataFrame()
@@ -46,9 +52,7 @@ def check_name(name, whitelist, blacklist):
 
 if __name__ == "__main__":
     setup_streamlit()
-    whitelists = st.file_uploader("Add Whitelist(s)", 
-                                  type=["csv"],
-                                  accept_multiple_files=True)
+    whitelists = upload_whitelists()
     raw_w, whitelist, raw_b, blacklist = get_lists(whitelists, B_SHEET)
 
     st.header("Check Name")
