@@ -54,7 +54,11 @@ def check_name(name, whitelist, blacklist):
 
 if __name__ == "__main__":
     setup_streamlit()
-    whitelist = upload_whitelists()
+    try:
+        whitelist = upload_whitelists()
+    except:
+        whitelist = ""
+        st.error("Input must be a Google Sheets Link")
     raw_w, whitelist, raw_b, blacklist = get_lists(whitelist, B_SHEET)
 
     st.header("Check Name")
