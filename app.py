@@ -11,6 +11,10 @@ def setup_streamlit():
 
 def upload_whitelists():
     sheet_url = st.text_input("Google Sheet Link")
+    if sheet_url.endswith("/edit"):
+        return sheet_url.replace("/edit", "/export?format=csv&gid=")
+    elif sheet_url.endswith("?usp=sharing"):
+        return sheet_url.replace("/edit?usp=sharing", "/export?format=csv&gid=")
     return sheet_url.replace("/edit#gid=", "/export?format=csv&gid=")
 
 @st.cache_data
