@@ -10,15 +10,13 @@ def setup_streamlit():
     st.write("Alejandro Alonso UChicago '26")
 
 def upload_whitelists():
-    whitelists = st.file_uploader("Add Whitelist(s)", 
-                                  type=["csv"],
-                                  accept_multiple_files=True)
-    return whitelists
+    sheet_url = st.text_input("Google Sheet Link")
+    return sheet_url.replace("/edit#gid=", "/export?format=csv&gid=")
 
 @st.cache_data
-def get_lists(wsheets, b_sheet):
+def get_lists(wsheet, b_sheet):
     res, raw = [], pd.DataFrame()
-    for wsheet in wsheets:
+    if wsheet:
         raw = pd.read_csv(wsheet, sep=",")
         lst = raw.drop(raw.columns[0], axis=1).values.tolist()
         lst = [x.lower() for x in list(chain.from_iterable(lst)) if isinstance(x, str)]
@@ -52,8 +50,8 @@ def check_name(name, whitelist, blacklist):
 
 if __name__ == "__main__":
     setup_streamlit()
-    whitelists = upload_whitelists()
-    raw_w, whitelist, raw_b, blacklist = get_lists(whitelists, B_SHEET)
+    whitelist = upload_whitelists()
+    raw_w, whitelist, raw_b, blacklist = get_lists(whitelist, B_SHEET)
 
     st.header("Check Name")
     name = st.text_input("First Name Last Name: ", "Joe Smith").split(" ")
